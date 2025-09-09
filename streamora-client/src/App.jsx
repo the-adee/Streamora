@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const SERVER_URL = "http://localhost:3001";
+const SERVER_URL = import.meta.env.VITE_BASE_URL;
 
 const socket = io(SERVER_URL);
 
@@ -9,6 +9,7 @@ import "./App.css";
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
+  console.log(SERVER_URL);
   useEffect(() => {
     function onConnect() {
       console.log(`Connected to Socket.IO server! Your ID is`, socket.id);
