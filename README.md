@@ -9,3 +9,17 @@ A Full-Stack Virtual Event Platform, built with a powerful tech-stack for:
 ## Project Vision
 
 A web platform where organizers can host virtual events (conferences, concerts, workshops, meetups) following the user can register, attend sessions, chat with others, and even network 1:1 or in groups.
+
+## Development Setup
+
+Client Setup:
+
+```
+npm run dev
+```
+
+Server Setup:
+
+```
+npm run dev
+```

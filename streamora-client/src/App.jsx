@@ -1,53 +1,47 @@
-import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
-
-const SERVER_URL = import.meta.env.VITE_BASE_URL;
-
-const socket = io(SERVER_URL);
-
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
+// pages
+import LoginPage from "./Pages/LoginPage";
+
+// components
+import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navigation/Navbar";
+
+// dev utility route for Socket.IO testing — keep out of prod nav
+import SocketTesting from "./Testing/SOCKET.IO";
+
+// ultra-minimal protected page to validate the flow end-to-end
+const Dashboard = () => (
+  <div className="min-h-screen bg-neutral-900 text-white p-6">
+    <h1 className="text-3xl font-bold">Dashboard</h1>
+    <p className="mt-2 text-gray-300">
+      Protected content visible only when logged in.
+    </p>
+  </div>
+);
+
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  console.log(SERVER_URL);
-  useEffect(() => {
-    function onConnect() {
-      console.log(`Connected to Socket.IO server! Your ID is`, socket.id);
-      setIsConnected(true);
-    }
-
-    function onDisconnect() {
-      console.log(`Disconnected from SOCKET.IO server`);
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
-  }, []);
   return (
-    <>
-      <h1>Building Streamora</h1>
-      <br />
-      <h4>
-        <i>in production</i>
-      </h4>
-      <div className="mt-8 p-4 rounded-md bg-gray-700 w-full max-w-sm">
-        <p className="text-xl font-semibold">
-          Connection Status&nbsp;<i>(Socket.IO)</i>
-        </p>
-        <p
-          className={`mt-2 text-2xl font-bold ${
-            isConnected ? "text-green-400" : "text-red-500"
-          }`}
-        >
-          {isConnected ? "Connected" : "Disconnected"}
-        </p>
-      </div>
-    </>
+    <div className="min-h-screen bg-neutral-900 text-white">
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        {/* dev-only route */}
+        <Route path="/socket-test" element={<SocketTesting />} />
+        {/* not found fallback */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </div>
   );
 }
 
