@@ -15,6 +15,9 @@ const AuthContext = createContext();
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
+  if (typeof window !== "undefined") {
+    window.__auth = auth;
+  }
   return useContext(AuthContext);
 };
 

@@ -7,6 +7,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import healthRouter from "./routes/health.js";
+import eventsRouter from "./routes/events.js";
+import meRouter from "./routes/me.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 // init express app
@@ -30,6 +32,8 @@ app.use(morgan("dev"));
 
 // api routes
 app.use("/health", healthRouter);
+app.use("/api/events", eventsRouter);
+app.use("/api/me", meRouter);
 
 // error handling
 // 404 not found handler
